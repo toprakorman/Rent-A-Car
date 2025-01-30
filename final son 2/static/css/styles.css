@@ -589,9 +589,9 @@ footer {
     justify-content: center;
     align-items: center;
     padding: 15px;
-    background-color: #2c3e50; /* Dark background for contrast */
+    background-color: #2c3e50;
     width: 100%;
-    margin-top: 20px; /* Space above the footer */
+    margin-top: 20px;
     text-align: center;
 }
 
@@ -604,12 +604,12 @@ footer {
 .language-switch {
     display: flex;
     gap: 15px;
-    margin-bottom: 5px; /* Space between flags and text */
+    margin-bottom: 5px;
 }
 
 .trademark {
     font-size: 14px;
     font-weight: bold;
-    color: white; /* White text */
+    color: white;
 }
 
