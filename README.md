@@ -21,3 +21,13 @@ Explanation of code:
 
 
 [Click here to watch the presentation](https://drive.google.com/file/d/1f6aS1tSrqPvtj9JpfprxS4p4IhiY87jC/view?usp=drive_link)
+
+ASSUMPTIONS
+- It says "Login with email/password or Google will be supported" in the file, so I assumed it was either one of them
+- It says "Photo upload needs to be supported but is optional for registration" in the file, so I implemented the option, but it does absolutely nothing
+- It says "Web application needs to be hosted on a provider like Azure Apps, Render.com." in the file, so I assumed it could be any hosting website since it says 'like'.
+
+PROBLEMS I ENCOUNTERED
+- I had problems with the password and email validation and authentication, so I got help from GitHub, YouTube, and StackOverflow, hence the leftover comments in those classes
+- I had problems with pinpointing offices on the map, so I added their locations to the code manually instead of getting them from the database
+- I changed some of the design choices since I liked mine better
