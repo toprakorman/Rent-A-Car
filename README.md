@@ -18,3 +18,6 @@ Explanation of code:
 - Google Maps is to locate my offices, which could have been implemented better. It's not working with the office database much. My end is at fault for that.
 - validators.py is for validating email and passwords while registering.
 - syles.css has the styles as the name implies
+
+
+[Click here to watch the presentation](https://drive.google.com/file/d/1f6aS1tSrqPvtj9JpfprxS4p4IhiY87jC/view?usp=drive_link)
