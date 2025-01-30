@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="search-results-container">
+    <h2>{{ translations['results'] }}</h2>
+
+    <div class="search-layout">
+        <aside class="sidebar">
+            <h3>{{ translations['filters'] }}</h3>
+            <form id="filterForm" method="GET" action="{{ url_for('search') }}">
+                <input type="hidden" name="pickup_office" value="{{ request.args.get('pickup_office', '') }}">
+        
+                <div class="filter-group">
+                    <h4>{{ translations['transmission'] }}</h4>
+                    <label>
+                        <input type="radio" name="transmission" value="Automatic" {% if request.args.get('transmission') == 'Automatic' %}checked{% endif %}>
+                        {{ translations['automatic'] }}
+                    </label>
+                    <label>
+                        <input type="radio" name="transmission" value="Manual" {% if request.args.get('transmission') == 'Manual' %}checked{% endif %}>
+                        {{ translations['manual'] }}
+                    </label>
+                </div>
+        
+                <div class="filter-group">
+                    <h4>{{ translations['sort'] }}</h4>
+                    
+                    <h5>{{ translations['cost'] }}</h5>
+                    <label>
+                        <input type="radio" name="sort" value="cost_asc" {% if request.args.get('sort') == 'cost_asc' %}checked{% endif %}>
+                        {{ translations['lowhigh'] }}
+                    </label>
+                    <label>
+                        <input type="radio" name="sort" value="cost_desc" {% if request.args.get('sort') == 'cost_desc' %}checked{% endif %}>
+                        {{ translations['highlow'] }}
+                    </label>
+        
+                    <h5>{{ translations['mileage'] }}</h5>
+                    <label>
+                        <input type="radio" name="sort" value="mileage_asc" {% if request.args.get('sort') == 'mileage_asc' %}checked{% endif %}>
+                        {{ translations['lowhigh'] }}
+                    </label>
+                    <label>
+                        <input type="radio" name="sort" value="mileage_desc" {% if request.args.get('sort') == 'mileage_desc' %}checked{% endif %}>
+                        {{ translations['highlow'] }}
+                    </label>
+                </div>
+        
+                <div class="filter-buttons">
+                    <button type="submit" class="apply-btn">{{ translations['applyf'] }}</button>
+                    <button type="button" id="clearFilters" class="clear-btn">{{ translations['clearf'] }}</button>
+                </div>
+            </form>
+        </aside>
+
+        <div class="car-list">
+            {% if cars %}
+                {% for car in cars %}
+                    <div class="car-item">
+                        <img src="{{ url_for('static', filename=car.image) }}" alt="{{ car.name }}" class="car-image">
+                        <div class="car-details">
+                            <h3><a href="{{ url_for('car_detail', car_id=car.id) }}" class="car-link">{{ car.name }}</a></h3>
+                            <ul class="car-info">
+                                <li><strong>{{ translations['transmission'] }}:</strong> {{ car.transmission }}</li>
+                                <li><strong>{{ translations['cost'] }}:</strong> {{ car.cost }}₺</li>
+                                <li><strong>{{ translations['deposit'] }}:</strong> {{ car.deposit }}₺</li>
+                                <li><strong>{{ translations['mileage'] }}:</strong> {{ car.mileage }} KM</li>
+                                <li><strong>{{ translations['age'] }}:</strong> {{ car.age }}</li>
+                                <li><strong>{{ translations['rental'] }}:</strong> {{ car.rental_cost }}₺</li>
+                            </ul>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="no-results">{{ translations['no_cars_found'] }}</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('clearFilters').addEventListener('click', function() {
+    window.location.href = "{{ url_for('search', pickup_office=request.args.get('pickup_office', '')) }}";
+});
+</script>
+{% endblock %}

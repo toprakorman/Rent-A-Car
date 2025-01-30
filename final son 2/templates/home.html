@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>{{ greeting }}</h2>
+<h2>{{ translations['search_rental'] }}</h2>
+<div class="search-box">
+    <form action="{{ url_for('search') }}" method="get" class="search-form">
+        <div class="form-group">
+            <label for="pickup-office">{{ translations['pickup_office'] }}</label>
+            <select name="pickup_office" id="pickup-office" required>
+                <option value="">{{ translations['select_office'] }}</option>
+                {% for office in offices %}
+                    <option value="{{ office.id }}">{{ office.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="pickup-date">{{ translations['pickup_date'] }}</label>
+            <input type="date" name="pickup_date" id="pickup-date" required>
+        </div>
+        <div class="form-group">
+            <label for="pickup-time">{{ translations['pickup_time'] }}</label>
+            <input type="time" name="pickup_time" id="pickup-time" required>
+        </div>
+        <div class="form-group">
+            <label for="return-office">{{ translations['return_office'] }}</label>
+            <select name="return_office" id="return-office" required>
+                <option value="">{{ translations['select_return'] }}</option>
+                {% for office in offices %}
+                    <option value="{{ office.id }}">{{ office.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="return-date">{{ translations['return_date'] }}</label>
+            <input type="date" name="return_date" id="return-date" required>
+        </div>
+        <div class="form-group">
+            <label for="return-time">{{ translations['return_time'] }}</label>
+            <input type="time" name="return_time" id="return-time" required>
+        </div>
+        <button type="submit" class="rent-button">{{ translations['rent_for_days'] }}</button>
+    </form>
+</div>
+
+<h2>{{ translations['office_map'] }}</h2>
+<div class="map-container">
+    <div id="map"></div>
+</div>
+<footer>
+    <div class="footer-content">
+        <div class="language-switch">
+            <a href="{{ url_for('set_language_route', lang='en') }}">
+                <img src="{{ url_for('static', filename='images/flag/en.png') }}" alt="EN" width="50" height="50">
+            </a>
+            <a href="{{ url_for('set_language_route', lang='tr') }}">
+                <img src="{{ url_for('static', filename='images/flag/tr.png') }}" alt="TR" width="50" height="50">
+            </a>
+        </div>
+        <p class="trademark">{{ translations['welcome'] }}™</p>
+    </div>
+</footer>
+
+<script>
+    function initMap() {
+        const locations = {{ locations | tojson }};
+        const map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 12,
+            center: { lat: 39.92077, lng: 32.85411 },
+        });
+
+        {% if session['user_id'] %}
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    map.setCenter(userLocation);
+                }, function() {
+                    console.log("{{ translations['geofail1'] }}");
+                });
+            } else {
+                console.log("{{ translations['geofail2'] }}");
+            }
+        {% else %}
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    map.setCenter(userLocation);
+                }, function() {
+                    alert("{{ translations['geofail3'] }}");
+                });
+            } else {
+                alert("{{ translations['geofail2'] }}");
+            }
+        {% endif %}
+
+        locations.forEach(location => {
+            const marker = new google.maps.Marker({
+                position: { lat: location.lat, lng: location.lng },
+                map: map,
+                title: location.name,
+            });
+
+            marker.addListener('click', () => {
+                window.location.href = `/office/${location.id}`;
+            });
+        });
+    }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=my_secret_api_key_hehe&callback=initMap" async defer></script>
+{% endblock %}

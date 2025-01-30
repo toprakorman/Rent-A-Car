@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="{{ language }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ translations['welcome'] }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="{{ url_for('static', filename='js/scripts.js') }}" defer></script>
+    <link rel="icon" href="{{ url_for('static', filename='images/icon/icon.png') }}" type="image/png">
+</head>
+<body>
+    <nav>
+        <h1>
+            <a href="{{ url_for('home') }}">
+                <img src="{{ url_for('static', filename='images/icon/icon.png') }}" alt="Icon" width="30" height="30">
+                {{ translations['welcome'] }}
+            </a>
+        </h1>        
+        {% if is_authenticated(session) %}
+            <a href="{{ url_for('logout') }}">{{ translations['logout'] }}</a>
+        {% else %}
+            <div class="language-switch">
+                <a href="{{ url_for('login') }}">{{ translations['login'] }}</a> |
+                <a href="{{ url_for('register') }}">{{ translations['register'] }}</a>
+            </div>
+        {% endif %}
+    </nav>
+
+    <div id="flash-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
